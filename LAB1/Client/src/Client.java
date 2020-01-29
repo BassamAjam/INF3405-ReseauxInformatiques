@@ -19,8 +19,8 @@ public class Client {
 	
 	public static void main(String args[]) throws Exception
 	{	
-		while(!validateIp());
-		while(!validatePort());
+		while(!getAndValidateIp());
+		while(!getAndvalidatePort());
 		try 
 		{	
 			socket = new Socket(ip, Integer.parseInt(port));
@@ -52,20 +52,31 @@ public class Client {
 		System.out.println("[3] Se deconnecter.");
 		System.out.print("\n\nChoisir un numero:");
 		
-		option = userInput.nextInt();
+		option = Integer.parseInt(userInput.nextLine());
 	
 		if(option == 1)
 		{
 			out.writeUTF("login");
 
-			System.out.print("\n\nSaisir votre nom d'utilisateur: ");			
-			Scanner usernameInput = new Scanner(System.in);
-			username = usernameInput.nextLine();
+			while(true) {	
+				System.out.print("\n\nSaisir votre nom d'utilisateur: ");			
+				username = userInput.nextLine();
+				
+				if(username.length() > 0) {
+					break;
+				}
+				System.out.println("Cannot be empty");
+			}
+			while(true) {
+				System.out.print("\n\nSaisir votre mot de passe: ");
+				psw = userInput.nextLine();
+				
+				if(psw.length() > 0) {
+					break;
+				}
+				System.out.println("Cannot be empty");
+			}
 			
-			System.out.print("\n\nSaisir votre mot de passe: ");
-			Scanner pswInput = new Scanner(System.in);	
-			psw = pswInput.nextLine();
-		
 			account = username + ":" + psw;
 			out.writeUTF(account);
 			String answerFromServer = in.readUTF();
@@ -79,9 +90,8 @@ public class Client {
 				out.writeUTF("sobelFilter");
 	
 				System.out.print("\n\nSaisir le nom d'image pour ajouter le filtre de sobel: ");			
-				Scanner photoInput = new Scanner(System.in);
 	
-				existFile(out, photoInput.nextLine());
+				checkFileExistsAndSendToServer(out, userInput.nextLine());
 			}
 			else
 				System.out.println("***S'identifier d'abord***");	
@@ -98,7 +108,7 @@ public class Client {
 		return true;
 	}
 	
-	private static void existFile(DataOutputStream out, String imageName) throws IOException
+	private static void checkFileExistsAndSendToServer(DataOutputStream out, String imageName) throws IOException
 	{
     	File file = new File(imageName);
     	if(!file.exists())
@@ -112,8 +122,7 @@ public class Client {
     		sendImageToServer(out,file);
     		
     		System.out.print("\n\nSaisir un nom pour la nouvelle image sobel: ");			
-			Scanner newPhotoInput = new Scanner(System.in);
-			readImageFromServer(newPhotoInput.nextLine());
+			readImageFromServer(userInput.nextLine());
     	}
 	}
 	
@@ -127,7 +136,7 @@ public class Client {
 		in.readFully(b);
 		fos.write(b, 0 , b.length);
 		fos.close();
-		System.out.println("l'image a ete bien creee");	
+		System.out.println("l'image a ete bien sauvagardée: " + file.getAbsolutePath());	
     }
 	
     private static void sendImageToServer(DataOutputStream out, File file) throws IOException 
@@ -140,12 +149,12 @@ public class Client {
     	out.flush();
     	out.write(b, 0, b.length);
     	out.flush();
-    	System.out.println("Fichier bien envoye");
+    	System.out.println("Fichier bien envoyé");
 	}
     
-	private static boolean validatePort() 
+	private static boolean getAndvalidatePort() 
 	{
-		System.out.println("Saisir le numero du port:");
+		System.out.println("Saisir le numéro du port:");
 		port = userInput.nextLine();
 		
 		try 
@@ -154,7 +163,7 @@ public class Client {
 		}
 		catch(Exception e)
 		{
-			System.out.println(port + " doit etre un numero valide.");
+			System.out.println(port + " doit etre un numéro valide.");
 			return false;
 		}
 		if(Integer.parseInt(port) < 5000 || Integer.parseInt(port) > 5050)
@@ -164,7 +173,7 @@ public class Client {
 		return true;
 	}
 
-	private static boolean validateIp() 
+	private static boolean getAndValidateIp() 
 	{
 		System.out.println("Saisir l'adresse ip:");
 		ip = userInput.nextLine();
