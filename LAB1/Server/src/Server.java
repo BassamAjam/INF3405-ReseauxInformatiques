@@ -54,7 +54,7 @@ public class Server {
 		}
 		catch(Exception e)
 		{
-			System.out.println(port + " doit etre un numero valide.");
+			System.out.println(port + " doit etre un numero valide entre 5000 et 5050");
 			return false;
 		}
 		if(Integer.parseInt(port) < 5000 || Integer.parseInt(port) > 5050)
