@@ -44,6 +44,7 @@ public class Server {
 		}
 	}
 
+	/* Cette fonction Vérifie si le port saisi par l'utilisateur est valide */	
 	private static boolean validatePort() {
 		System.out.println("Saisir le numero du port:");
 		port = userInput.nextLine();
@@ -64,6 +65,7 @@ public class Server {
 		return true;
 	}
 
+	/* Cette fonction Vérifie si l'adresse ip saisi par l'utilisateur est valide */	
 	private static boolean validateIp() 
 	{
 		System.out.println("Saisir l'adresse ip:");

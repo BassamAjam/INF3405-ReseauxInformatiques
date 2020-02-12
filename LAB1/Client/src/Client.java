@@ -39,6 +39,7 @@ public class Client {
 		System.out.println("****Socket est ferme - Fin du programme.****");
 	}
 	
+	/* Cette fonction sert à envoyer au serveur l'option choisi par l'utilsateur */
 	private static boolean sendOption() throws IOException 
 	{
 		String username = "";
@@ -108,6 +109,7 @@ public class Client {
 		return true;
 	}
 	
+	/* Cette fonction sert à envoyer l'image au serveur apres avoir vérifier si l'image est valide ou non */
 	private static void checkFileExistsAndSendToServer(DataOutputStream out, String imageName) throws IOException
 	{
     	File file = new File(imageName);
@@ -126,6 +128,7 @@ public class Client {
     	}
 	}
 	
+	/* Cette fonction sert à lire l'image reçu du serveur */
     private static void readImageFromServer(String newImageName) throws IOException
     {
 		DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -136,9 +139,10 @@ public class Client {
 		in.readFully(b);
 		fos.write(b, 0 , b.length);
 		fos.close();
-		System.out.println("l'image a ete bien sauvagard�e: " + file.getAbsolutePath());	
+		System.out.println("l'image a ete bien sauvagardée: " + file.getAbsolutePath());	
     }
 	
+	/* Cette fonction sert à envoyer l'image au serveur */
     private static void sendImageToServer(DataOutputStream out, File file) throws IOException 
     {
     	byte[] b = new byte[(int) file.length()];
@@ -149,12 +153,13 @@ public class Client {
     	out.flush();
     	out.write(b, 0, b.length);
     	out.flush();
-    	System.out.println("Fichier bien envoy�");
+    	System.out.println("Fichier bien envoyé");
 	}
     
+	/* Cette fonction Vérifie si le port saisi par l'utilisateur est valide */	
 	private static boolean getAndvalidatePort() 
 	{
-		System.out.println("Saisir le num�ro du port:");
+		System.out.println("Saisir le numéro du port:");
 		port = userInput.nextLine();
 		
 		try 
@@ -163,7 +168,7 @@ public class Client {
 		}
 		catch(Exception e)
 		{
-			System.out.println(port + " doit etre un num�ro valide.");
+			System.out.println(port + " doit etre un numéro valide.");
 			return false;
 		}
 		if(Integer.parseInt(port) < 5000 || Integer.parseInt(port) > 5050)
@@ -173,6 +178,7 @@ public class Client {
 		return true;
 	}
 
+	/* Cette fonction Vérifie si l'adresse ip saisi par l'utilisateur est valide */	
 	private static boolean getAndValidateIp() 
 	{
 		System.out.println("Saisir l'adresse ip:");

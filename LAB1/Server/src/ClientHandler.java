@@ -29,6 +29,7 @@ public class ClientHandler extends Thread
 
 	}
 	
+	/* Cette fonction existe dans la classe mère Thread et elle s'execute une fonction que le thread est crééé  */	
 	public void run() 
 	{
 		try
@@ -57,6 +58,9 @@ public class ClientHandler extends Thread
 		}
 	}
 	
+	/* Cette fonction sert à recevoir du serveur l'option choisi par l'utilsateur
+		 Cette fonction décide l'état du compte de l'utilisateur. (S'il existe ou pas, s'il est déjà connecté etc..)
+	 */
 	private boolean readOptions() throws IOException {
 		
 		DataInputStream in = new DataInputStream(socket.getInputStream());	
@@ -69,13 +73,13 @@ public class ClientHandler extends Thread
 				
 			if(connectedList.contains(account))
 			{
-				out.writeUTF("Vous etes deja connecte");
-				System.out.println("vous etes deja connecte");
+				out.writeUTF("Vous etes déjà connecté");
+				System.out.println("vous etes déjà connecté");
 				
 			}
 			else if(findInFile(out, "members.txt", account))
 			{
-				out.writeUTF("Connexion r�ussie!");
+				out.writeUTF("Connexion réussie!");
 				connect(account);
 			}
 			else
@@ -99,6 +103,11 @@ public class ClientHandler extends Thread
 		return true;
 	}
 	
+	/* Cette fonction cherche dans notre base de données(fichier.txt) le compte qui vient de se connecter à notre serveur 
+		 Si le compte existe, l'utilisateur se connecte au serveur
+		 Sinon, le compte de l'utilisateur sera ajouté dans le fichier puis il se connecte au serveur.
+		 Si le mot de passe est incorrecte, le client va recevoir un avertissement.
+	*/
 	private boolean findInFile(DataOutputStream out, String fileName, String account) throws IOException
 	{
 
@@ -138,6 +147,7 @@ public class ClientHandler extends Thread
     	return false;
 	}
 
+	/* Cette fonction lit l'image envoyé du client puis elle applique le filtre de sobel sur la photo et à la fin elle la renvoie au client*/
 	private void readImageFromClient(DataInputStream in) throws IOException
 	{
 		File file = new File(clientNumber + "newImage.png");
@@ -155,6 +165,7 @@ public class ClientHandler extends Thread
 		sendImageToClient("sobel.png");
 	}
 	
+	/* Cette fonction envoie une image au client */
 	private void sendImageToClient(String imageName) throws IOException
 	{
     	File file = new File(imageName);
@@ -169,11 +180,11 @@ public class ClientHandler extends Thread
     	out.flush();
     	out.write(b, 0, b.length);
     	out.flush();
-    	System.out.println("Fichier bien envoye");
+    	System.out.println("Fichier bien envoyé");
 		
 	}
 	
-	
+	/* Cette fonction écrit dans un fichier.txt */
 	private static void writeInFile(String fileName, String str) throws IOException
 	{  
 		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
@@ -182,11 +193,12 @@ public class ClientHandler extends Thread
 	    writer.close();
 	}
 	
+	/* Cette fonction ajoute le client qui vient de se connecter */
 	private void connect(String account) throws IOException 
 	{
 		connectedList.add(account);
 
-		System.out.println("New connection with client #" + clientNumber + " at " + socket);
+		System.out.println("Nouvelle connexion avec le client #" + clientNumber + " à " + socket);
 		System.out.println("Bonjour " + account.split(":")[0] + "!");
 	}
 	
